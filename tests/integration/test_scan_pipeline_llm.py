@@ -4,6 +4,7 @@ Tests the complete flow: entity extraction → threat intel → classification �
 
 Run with: pytest tests/integration/test_scan_pipeline_llm.py -m llm -v
 """
+
 from __future__ import annotations
 
 import json

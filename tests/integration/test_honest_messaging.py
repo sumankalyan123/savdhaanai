@@ -5,6 +5,7 @@ The classifier must NEVER use absolute language like 'safe', 'definitely',
 
 Run with: pytest tests/integration/test_honest_messaging.py -m llm -v
 """
+
 from __future__ import annotations
 
 import json
@@ -116,9 +117,7 @@ async def test_all_scam_messages_have_evidence():
         msg = fixtures[key]
         result = await classify_content(msg["text"], make_entities(msg["entities"]), [])
 
-        assert len(result.evidence) >= 1, (
-            f"Scam '{key}' classified with no evidence"
-        )
+        assert len(result.evidence) >= 1, f"Scam '{key}' classified with no evidence"
         assert len(result.explanation) >= 50, (
             f"Scam '{key}' explanation too short ({len(result.explanation)} chars)"
         )

@@ -2,6 +2,7 @@
 
 Run with: pytest tests/integration/test_entity_extractor_llm.py -m llm -v
 """
+
 from __future__ import annotations
 
 import json
@@ -62,8 +63,7 @@ async def test_extract_crypto_addresses():
     entities = await extract_entities(msg["text"])
 
     assert any(
-        "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD38" in addr
-        for addr in entities.crypto_addresses
+        "0x742d35Cc6634C0532925a3b844Bc9e7595f2bD38" in addr for addr in entities.crypto_addresses
     )
 
 
