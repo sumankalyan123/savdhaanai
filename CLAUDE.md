@@ -168,11 +168,59 @@ savdhaan-ai/
 - Soft delete where needed (`deleted_at` timestamp)
 - Index all foreign keys and frequently queried columns
 
-### Testing
+### Testing — MANDATORY for every feature
+
+**Rule: No feature is complete without tests. Every PR must include tests for all new/changed code.**
+
+#### Test structure
+- `tests/unit/` — Pure logic tests, no DB or external calls. Fast. Run on every save.
+- `tests/integration/` — Tests with DB (SQLite in tests) and mocked external APIs.
+- `tests/fixtures/` — Sample scam messages, screenshots, API responses for test data.
+
+#### What to test for EVERY feature
+
+| Layer | What to test | Example |
+|-------|-------------|---------|
+| **Utils** | All public functions, edge cases, empty inputs, malformed inputs | URL parser: valid URLs, no URLs, obfuscated URLs, trailing punctuation |
+| **Services** | Happy path + error path + edge cases. Mock all external calls. | Classifier: high-risk message, low-risk message, LLM failure fallback |
+| **API routes** | Request validation, auth, success response, error responses, status codes | POST /scan: valid text, missing content, invalid API key, rate limited |
+| **Models** | Creation, required fields, constraints, relationships | Scan: create with all fields, missing required field raises error |
+| **Middleware** | Request/response modification, error handling | Error handler: SavdhaanError → JSON, unknown exception → 500 |
+
+#### Coverage requirements
 - `pytest` with `pytest-asyncio` for async tests
-- Minimum 80% coverage on services/
-- All external API calls mocked in tests
-- Use fixtures/ for sample scam data
+- **Minimum 80% coverage on `src/services/`** — the core business logic
+- **Minimum 70% coverage on `src/api/`** — routes and middleware
+- **100% coverage on `src/utils/`** — pure utility functions, no excuse
+- **100% coverage on `src/core/`** — config, constants, exceptions, security
+- Run coverage: `make test-cov`
+
+#### Test quality rules
+- All external API calls (Claude, PhishTank, Safe Browsing, WHOIS) **must be mocked** — tests must not make real HTTP calls
+- Use `pytest-httpx` for mocking HTTP requests
+- Use `factory-boy` + `faker` for generating test data
+- Every test must have a clear name describing the scenario: `test_classify_phishing_message_returns_critical_risk`
+- Test both the happy path AND failure modes (what happens when Claude API is down? When PhishTank returns 500?)
+- Never use hardcoded UUIDs — use `uuid.uuid4()` in fixtures
+- Test the honest messaging: verify no scan result contains "safe", "definitely", "guaranteed", "100%"
+
+#### When writing a new feature
+1. Write the feature code
+2. Write unit tests for all public functions
+3. Write integration tests for the API endpoint
+4. Run `make test-cov` and verify coverage meets thresholds
+5. Run `make lint` and fix any issues
+6. Only then is the feature considered done
+
+#### Sample scam messages for testing
+Keep in `tests/fixtures/` as `.txt` or `.json` files:
+- Phishing SMS (bank KYC)
+- UPI collect fraud
+- Lottery/prize scam
+- Job scam with upfront fee
+- Legitimate marketing message (should NOT be flagged)
+- Benign personal message (should score 0-19)
+- Edge case: message with no URLs, phones, or entities
 
 ### Git
 - Branch naming: `feat/`, `fix/`, `docs/`, `refactor/`, `test/`
