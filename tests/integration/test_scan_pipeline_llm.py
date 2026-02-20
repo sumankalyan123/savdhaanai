@@ -18,8 +18,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.config import settings
 from src.core.constants import ContentType, ScanCategory
 from src.core.security import generate_api_key, get_key_prefix, hash_api_key
-from src.models.scan import Scan, ScanEntity
 from src.models.scam_card import ScamCard
+from src.models.scan import Scan, ScanEntity
 from src.models.user import ApiKey, User
 from src.services.scan_service import ScanService
 
