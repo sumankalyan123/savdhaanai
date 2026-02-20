@@ -38,7 +38,34 @@ All detailed docs live in [`docs/`](docs/):
 
 ## Status
 
-**Phase 0 — Foundation**: Setting up project infrastructure and core pipeline.
+**Phase 0 + MVP 1 Sprints 1-3 — COMPLETE** (2026-02-20)
+
+All core backend code is built: scan pipeline, API endpoints, database models, threat intel integrations, LLM classifier, scam card generator, and 30 passing tests.
+
+See [docs/PROGRESS.md](docs/PROGRESS.md) for detailed build progress and what's next.
+
+### Quick Start
+
+```bash
+# 1. Clone and install
+git clone https://github.com/sumankalyan123/savdhaanai.git
+cd savdhaanai
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+
+# 2. Copy env and add your API keys
+cp .env.example .env
+
+# 3. Run tests
+make test
+
+# 4. Start local dev (Docker required)
+make dev
+
+# 5. Run migrations + seed
+make migrate
+make seed
+```
 
 ## License
 

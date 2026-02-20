@@ -26,6 +26,7 @@ Detailed docs live in `docs/` — always check these before making architectural
 - **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — AWS hosting, Docker, Kubernetes, CI/CD pipeline, monitoring, backup/DR, cost estimates
 - **[docs/ROADMAP.md](docs/ROADMAP.md)** — Phased delivery plan, sprint breakdown, milestones
 - **[docs/LIMITATIONS.md](docs/LIMITATIONS.md)** — Honest limitations, adversarial resilience, anti-abuse strategy, user messaging framework
+- **[docs/PROGRESS.md](docs/PROGRESS.md)** — Build progress tracker, what's done, what's next
 
 ## Tech Stack
 
