@@ -22,7 +22,7 @@ dependencies = [
     # HTTP client
     "httpx>=0.28,<1.0",
     # Validation & settings
-    "pydantic>=2.10,<3.0",
+    "pydantic[email]>=2.10,<3.0",
     "pydantic-settings>=2.7,<3.0",
     # AI
     "anthropic>=0.42,<1.0",

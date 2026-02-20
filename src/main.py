@@ -8,8 +8,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.middleware.error_handler import error_handler_middleware
 from src.api.middleware.logging import LoggingMiddleware
+from src.api.middleware.rate_limiter import close_redis
 from src.api.middleware.request_id import RequestIDMiddleware
-from src.api.routes import card, health, report, scan
+from src.api.routes import auth, card, health, report, scan
 from src.core.config import settings
 from src.core.database import engine
 
@@ -19,6 +20,7 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
     # Startup
     yield
     # Shutdown
+    await close_redis()
     await engine.dispose()
 
 
@@ -46,6 +48,7 @@ app.add_middleware(
 
 # Routes
 app.include_router(health.router, prefix=settings.API_V1_PREFIX, tags=["health"])
+app.include_router(auth.router, prefix=settings.API_V1_PREFIX, tags=["auth"])
 app.include_router(scan.router, prefix=settings.API_V1_PREFIX, tags=["scan"])
 app.include_router(card.router, prefix=settings.API_V1_PREFIX, tags=["card"])
 app.include_router(report.router, prefix=settings.API_V1_PREFIX, tags=["report"])

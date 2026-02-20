@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, File, Form, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.deps import get_api_key
+from src.api.middleware.rate_limiter import check_rate_limit
 from src.api.schemas.common import ApiResponse
 from src.api.schemas.scan import ScanRequest
 from src.core.constants import (
@@ -29,6 +30,8 @@ async def create_scan(
     db: AsyncSession = Depends(get_db),
 ) -> ApiResponse:
     """Scan text content for scam indicators."""
+    await check_rate_limit(str(api_key.id), api_key.plan)
+
     service = ScanService(db)
     result = await service.scan_text(
         content=request.content,
@@ -51,6 +54,8 @@ async def create_image_scan(
     db: AsyncSession = Depends(get_db),
 ) -> ApiResponse:
     """Scan an image for scam indicators (OCR + analysis)."""
+    await check_rate_limit(str(api_key.id), api_key.plan)
+
     if file.content_type not in SUPPORTED_IMAGE_TYPES:
         raise UnsupportedMediaTypeError(
             f"Unsupported image type: {file.content_type}. "
