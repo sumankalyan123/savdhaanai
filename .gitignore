@@ -45,5 +45,10 @@ alembic/versions/__pycache__/
 *.log
 logs/
 
+# Node / Next.js
+node_modules/
+.next/
+out/
+
 # OS
 Thumbs.db
