@@ -12,13 +12,21 @@ down:
 install:
 	pip install -e ".[dev]"
 
-# Run all tests
+# Run unit tests only (fast, no API calls)
 test:
+	pytest tests/ -v --tb=short -m "not llm"
+
+# Run LLM integration tests (slow, requires ANTHROPIC_API_KEY)
+test-llm:
+	pytest tests/ -v --tb=short -m llm
+
+# Run ALL tests (unit + LLM)
+test-all:
 	pytest tests/ -v --tb=short
 
 # Run tests with coverage
 test-cov:
-	pytest tests/ -v --tb=short --cov=src --cov-report=term-missing
+	pytest tests/ -v --tb=short --cov=src --cov-report=term-missing -m "not llm"
 
 # Lint check
 lint:

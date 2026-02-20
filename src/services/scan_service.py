@@ -282,6 +282,7 @@ class ScanService:
             + timedelta(hours=settings.RAW_CONTENT_RETENTION_HOURS),
         )
         self.db.add(scan)
+        await self.db.flush()  # Populate scan.id before creating related entities
 
         # Save entities
         for url in entities.urls:

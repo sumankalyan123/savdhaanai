@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -171,7 +172,7 @@ async def seed() -> None:
                         severity_default = EXCLUDED.severity_default,
                         keywords = EXCLUDED.keywords
                 """),
-                {**st, "keywords": str(st["keywords"])},
+                {**st, "keywords": json.dumps(st["keywords"])},
             )
     await engine.dispose()
     print(f"Seeded {len(SCAM_TYPES)} scam types.")

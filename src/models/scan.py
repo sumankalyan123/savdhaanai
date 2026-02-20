@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import JSON as JSONB
-from sqlalchemy import DateTime, Float, Integer, SmallInteger, String, Text, func
+from sqlalchemy import DateTime, Float, ForeignKey, Integer, SmallInteger, String, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -14,7 +14,9 @@ from src.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 class Scan(UUIDPrimaryKeyMixin, TimestampMixin, Base):
     __tablename__ = "scans"
 
-    api_key_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False, index=True)
+    api_key_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("api_keys.id"), nullable=False, index=True
+    )
     content_type: Mapped[str] = mapped_column(String(10), nullable=False)  # text, image
     channel: Mapped[str | None] = mapped_column(String(20))
     category: Mapped[str] = mapped_column(String(20), default="scam_check", nullable=False)
@@ -57,7 +59,9 @@ class Scan(UUIDPrimaryKeyMixin, TimestampMixin, Base):
 class ScanEntity(UUIDPrimaryKeyMixin, Base):
     __tablename__ = "scan_entities"
 
-    scan_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False, index=True)
+    scan_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("scans.id"), nullable=False, index=True
+    )
     entity_type: Mapped[str] = mapped_column(String(20), nullable=False)  # url, phone, email, etc.
     value: Mapped[str] = mapped_column(String(2048), nullable=False)
     normalized_value: Mapped[str | None] = mapped_column(String(2048))
@@ -73,7 +77,9 @@ class ScanEntity(UUIDPrimaryKeyMixin, Base):
 class ThreatResult(UUIDPrimaryKeyMixin, Base):
     __tablename__ = "threat_results"
 
-    scan_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False, index=True)
+    scan_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("scans.id"), nullable=False, index=True
+    )
     entity_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
     source: Mapped[str] = mapped_column(
         String(30), nullable=False

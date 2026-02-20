@@ -99,6 +99,9 @@ ignore = [
 asyncio_mode = "auto"
 testpaths = ["tests"]
 filterwarnings = ["ignore::DeprecationWarning"]
+markers = [
+    "llm: tests that make real LLM API calls (slow, costs money, requires ANTHROPIC_API_KEY)",
+]
 
 [tool.mypy]
 python_version = "3.12"

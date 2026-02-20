@@ -248,6 +248,7 @@ Keep in `tests/fixtures/` as `.txt` or `.json` files:
 3. **Graceful degradation**: If PhishTank is down, still return LLM analysis + other intel. Never fail completely.
 4. **Share-first**: The shareable scam card is a core feature, not an afterthought. Optimize for WhatsApp/iMessage forwarding.
 5. **Speed**: Target <3 seconds for a full scan result. Use parallel threat intel checks.
+6. **Always run tasks in parallel**: When building features, running tests, or performing any independent operations — always execute them in parallel (e.g., `asyncio.gather()`, parallel tool calls, concurrent API requests). Never run independent tasks sequentially when they can be parallelized.
 
 ## Common Commands
 
